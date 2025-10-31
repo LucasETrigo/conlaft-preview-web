@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 
 export function ContactForm() {
     const [loading, setLoading] = useState(false);
+    const [sent, setSent] = useState(false);
     const [formData, setFormData] = useState({
         firstname: '',
         lastname: '',
@@ -22,14 +23,17 @@ export function ContactForm() {
     ) => {
         const { id, value } = e.target;
         setFormData((prev) => ({ ...prev, [id]: value }));
+        if (sent) setSent(false);
     };
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
         if (!formData.firstname || !formData.email || !formData.message) {
             toast.error('Completá al menos nombre, email y mensaje 💬');
             return;
         }
+
         setLoading(true);
         try {
             const res = await fetch('/api/contact', {
@@ -40,9 +44,19 @@ export function ContactForm() {
                 body: JSON.stringify(formData),
             });
 
-            if (res.ok) {
-                const result = await res.json();
-                toast.success(result.message || 'Mensaje enviado ✅');
+            const data = await res.json().catch(() => ({}));
+
+            if (!res.ok) {
+                toast.error(
+                    data?.message ||
+                        'No pudimos enviar el formulario 😔. Probá de nuevo.'
+                );
+            } else {
+                toast.success(
+                    data?.message ||
+                        'Mensaje enviado ✅. Gracias por escribirnos.'
+                );
+                setSent(true);
                 setFormData({
                     firstname: '',
                     lastname: '',
@@ -50,8 +64,6 @@ export function ContactForm() {
                     telefono: '',
                     message: '',
                 });
-            } else {
-                toast.error('No pudimos enviar el formulario 😔');
             }
         } catch (error) {
             toast.error('Ocurrió un error inesperado.');
@@ -62,14 +74,23 @@ export function ContactForm() {
 
     return (
         <div className='rounded-3xl bg-white/80 dark:bg-slate-900/70 backdrop-blur border border-slate-200/70 dark:border-slate-800/70 shadow-[0_18px_60px_rgba(15,23,42,0.04)] p-6 md:p-8'>
+            {/* el contenedor va acá para que los toasts se vean solo en esta page */}
             <ToastContainer position='top-right' />
-            <div className='mb-6'>
-                <h2 className='text-xl font-semibold text-slate-900 dark:text-white'>
-                    Enviar mensaje
-                </h2>
-                <p className='text-sm text-slate-500 dark:text-slate-400 mt-1'>
-                    Contanos brevemente qué necesitás y te respondemos.
-                </p>
+            <div className='mb-6 flex items-start justify-between gap-4'>
+                <div>
+                    <h2 className='text-xl font-semibold text-slate-900 dark:text-white'>
+                        Enviar mensaje
+                    </h2>
+                    <p className='text-sm text-slate-500 dark:text-slate-400 mt-1'>
+                        Contanos brevemente qué necesitás y te respondemos.
+                    </p>
+                </div>
+                {sent ? (
+                    <span className='inline-flex items-center gap-1 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-200 border border-emerald-200/60 dark:border-emerald-500/30 px-3 py-1 text-xs'>
+                        <span className='h-2 w-2 rounded-full bg-emerald-400' />
+                        Enviado
+                    </span>
+                ) : null}
             </div>
             <form className='space-y-5' onSubmit={handleSubmit}>
                 <div className='flex flex-col md:flex-row gap-4'>
@@ -141,7 +162,7 @@ export function ContactForm() {
                     className={cn(
                         'inline-flex items-center justify-center gap-2 w-full h-11 rounded-xl text-sm font-medium transition-all',
                         'bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-lg hover:shadow-blue-500/25 hover:from-blue-700 hover:to-cyan-600',
-                        loading && 'opacity-80 cursor-not-allowed'
+                        loading && 'opacity-70 cursor-not-allowed'
                     )}
                     type='submit'
                     disabled={loading}
