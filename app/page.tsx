@@ -7,11 +7,10 @@ import { WorldMapDemo } from '@/components/sections/worldMapDemo';
 
 export default function Home() {
     return (
-        <main className='min-h-screen'>
+        <div>
             <Hero />
             <Features />
-            <WorldMapDemo />
             <Testimonials />
-        </main>
+        </div>
     );
 }

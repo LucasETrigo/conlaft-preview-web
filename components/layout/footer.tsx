@@ -61,15 +61,6 @@ export function Footer() {
                 { label: 'Soporte', href: '/soporte' },
             ],
         },
-        {
-            title: 'Legal',
-            links: [
-                { label: 'Privacidad', href: '/privacidad' },
-                { label: 'Términos de Servicio', href: '/terminos' },
-                { label: 'Seguridad', href: '/seguridad' },
-                { label: 'Cookies', href: '/cookies' },
-            ],
-        },
     ];
 
     const socialLinks = [
@@ -127,7 +118,7 @@ export function Footer() {
             <div className='container mx-auto px-4 relative z-10'>
                 {/* Main Footer Content */}
                 <div className='py-16'>
-                    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-12 mb-12'>
+                    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-12'>
                         {/* Brand Section - Takes 2 columns */}
                         <div className='lg:col-span-2 space-y-6'>
                             <Link
@@ -244,7 +235,7 @@ export function Footer() {
                             Todos los derechos reservados.
                         </p>
 
-                        <div className='flex items-center gap-6 text-sm text-gray-500 dark:text-gray-400'>
+                        {/* <div className='flex items-center gap-6 text-sm text-gray-500 dark:text-gray-400'>
                             <Link
                                 href='/privacidad'
                                 className='hover:text-blue-600 dark:hover:text-blue-400 transition-colors'
@@ -265,7 +256,7 @@ export function Footer() {
                             >
                                 Cookies
                             </Link>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </div>

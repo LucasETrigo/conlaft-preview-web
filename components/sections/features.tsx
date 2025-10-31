@@ -61,14 +61,6 @@ export function Features() {
 
     return (
         <section className='relative py-32 overflow-hidden'>
-            {/* Background with gradient and subtle grid */}
-            <div className='absolute inset-0 bg-gradient-to-b from-gray-50 via-white to-gray-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900'></div>
-            <div className='absolute inset-0 grid-background opacity-30'></div>
-
-            {/* Decorative elements - Blue theme */}
-            <div className='absolute top-0 left-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl'></div>
-            <div className='absolute bottom-0 right-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl'></div>
-
             {/* Main Content */}
             <div className='container mx-auto px-4 relative z-10'>
                 {/* Section Header */}

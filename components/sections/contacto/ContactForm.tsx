@@ -1,4 +1,5 @@
 'use client';
+
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -7,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 
 export function ContactForm() {
+    const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         firstname: '',
         lastname: '',
@@ -19,13 +21,16 @@ export function ContactForm() {
         e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {
         const { id, value } = e.target;
-        setFormData({ ...formData, [id]: value });
+        setFormData((prev) => ({ ...prev, [id]: value }));
     };
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log('Form submitted', formData);
-
+        if (!formData.firstname || !formData.email || !formData.message) {
+            toast.error('Completá al menos nombre, email y mensaje 💬');
+            return;
+        }
+        setLoading(true);
         try {
             const res = await fetch('/api/contact', {
                 method: 'POST',
@@ -37,7 +42,7 @@ export function ContactForm() {
 
             if (res.ok) {
                 const result = await res.json();
-                toast.success(result.message);
+                toast.success(result.message || 'Mensaje enviado ✅');
                 setFormData({
                     firstname: '',
                     lastname: '',
@@ -46,100 +51,123 @@ export function ContactForm() {
                     message: '',
                 });
             } else {
-                toast.error('Form submission failed');
+                toast.error('No pudimos enviar el formulario 😔');
             }
         } catch (error) {
-            toast.error('An error occurred');
+            toast.error('Ocurrió un error inesperado.');
+        } finally {
+            setLoading(false);
         }
     };
 
     return (
-        <div className='max-w-6xl w-full mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input  bg-transparent  z-50'>
-            <ToastContainer /> {/* Add ToastContainer here */}
-            <h2 className='font-bold text-xl text-black'>Contacto</h2>
-            <p className=' text-sm mt-2 text-gray-700'>
-                Si tienes alguna pregunta o comentario, no dudes en ponerte en
-                contacto usando el formulario a continuación.
-            </p>
-            <form className='my-8' onSubmit={handleSubmit}>
-                <div className='flex  flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4'>
+        <div className='rounded-3xl bg-white/80 dark:bg-slate-900/70 backdrop-blur border border-slate-200/70 dark:border-slate-800/70 shadow-[0_18px_60px_rgba(15,23,42,0.04)] p-6 md:p-8'>
+            <ToastContainer position='top-right' />
+            <div className='mb-6'>
+                <h2 className='text-xl font-semibold text-slate-900 dark:text-white'>
+                    Enviar mensaje
+                </h2>
+                <p className='text-sm text-slate-500 dark:text-slate-400 mt-1'>
+                    Contanos brevemente qué necesitás y te respondemos.
+                </p>
+            </div>
+            <form className='space-y-5' onSubmit={handleSubmit}>
+                <div className='flex flex-col md:flex-row gap-4'>
                     <LabelInputContainer>
-                        <Label htmlFor='firstname'>Nombre</Label>
+                        <Label htmlFor='firstname'>Nombre *</Label>
                         <Input
                             id='firstname'
-                            placeholder='Nombre'
+                            placeholder='Juan'
                             type='text'
                             value={formData.firstname}
                             onChange={handleChange}
+                            required
                         />
                     </LabelInputContainer>
                     <LabelInputContainer>
                         <Label htmlFor='lastname'>Apellido</Label>
                         <Input
                             id='lastname'
-                            placeholder='Apellido'
+                            placeholder='Pérez'
                             type='text'
                             value={formData.lastname}
                             onChange={handleChange}
                         />
                     </LabelInputContainer>
                 </div>
-                <LabelInputContainer className='mb-4'>
-                    <Label htmlFor='email'>Email</Label>
+
+                <LabelInputContainer>
+                    <Label htmlFor='email'>Email *</Label>
                     <Input
                         id='email'
-                        placeholder='email@gmail.com'
+                        placeholder='email@empresa.com'
                         type='email'
                         value={formData.email}
                         onChange={handleChange}
+                        required
                     />
                 </LabelInputContainer>
 
-                <LabelInputContainer className='mb-4'>
-                    <Label htmlFor='telefono'>Teléfono</Label>
+                <LabelInputContainer>
+                    <Label htmlFor='telefono'>Teléfono / WhatsApp</Label>
                     <Input
                         id='telefono'
-                        placeholder='Teléfono'
+                        placeholder='+54 9 ...'
                         type='tel'
                         value={formData.telefono}
                         onChange={handleChange}
                     />
                 </LabelInputContainer>
 
-                <LabelInputContainer className='mb-4'>
-                    <Label htmlFor='message'>Mensaje</Label>
+                <LabelInputContainer>
+                    <div className='flex items-center justify-between'>
+                        <Label htmlFor='message'>Mensaje *</Label>
+                        <span className='text-xs text-slate-400'>
+                            máx. 500 caracteres
+                        </span>
+                    </div>
                     <textarea
                         id='message'
-                        placeholder='Escribe tu mensaje aquí...'
-                        className='resize-none w-full h-32 p-2 text-gray-800 rounded-md border border-gray-200 focus:outline-none focus:ring-2 focus:ring-neutral-600'
-                        rows={4}
+                        maxLength={500}
+                        placeholder='Contanos qué tipo de implementación o demo necesitás...'
+                        className='resize-none w-full h-32 p-2.5 text-slate-900 dark:text-slate-50 rounded-xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-900/40 focus:outline-none focus:ring-2 focus:ring-blue-500/60'
                         value={formData.message}
                         onChange={handleChange}
+                        required
                     />
                 </LabelInputContainer>
 
                 <button
-                    className='bg-gradient-to-br relative group/btn from-zinc-900 to-zinc-900  block bg-zinc-800 w-full text-white rounded-md h-10 font-medium  shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]'
+                    className={cn(
+                        'inline-flex items-center justify-center gap-2 w-full h-11 rounded-xl text-sm font-medium transition-all',
+                        'bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-lg hover:shadow-blue-500/25 hover:from-blue-700 hover:to-cyan-600',
+                        loading && 'opacity-80 cursor-not-allowed'
+                    )}
                     type='submit'
+                    disabled={loading}
                 >
-                    Enviar &rarr;
-                    <BottomGradient />
+                    {loading ? 'Enviando...' : 'Enviar mensaje'}
+                    {!loading && (
+                        <svg
+                            className='w-4 h-4'
+                            fill='none'
+                            stroke='currentColor'
+                            strokeWidth='2'
+                            viewBox='0 0 24 24'
+                        >
+                            <path d='M5 12h13'></path>
+                            <path d='m13 5 7 7-7 7'></path>
+                        </svg>
+                    )}
                 </button>
 
-                <div className='bg-gradient-to-r from-transparent via-neutral-700 to-transparent my-8 h-[1px] w-full' />
+                <p className='text-xs text-slate-400'>
+                    Al enviar aceptás ser contactado por el equipo de Conlaft.
+                </p>
             </form>
         </div>
     );
 }
-
-const BottomGradient = () => {
-    return (
-        <>
-            <span className='group-hover/btn:opacity-100 block transition duration-500 opacity-0 absolute h-px w-full -bottom-px inset-x-0 bg-gradient-to-r from-transparent via-cyan-500 to-transparent' />
-            <span className='group-hover/btn:opacity-100 blur-sm block transition duration-500 opacity-0 absolute h-px w-1/2 mx-auto -bottom-px inset-x-10 bg-gradient-to-r from-transparent via-indigo-500 to-transparent' />
-        </>
-    );
-};
 
 const LabelInputContainer = ({
     children,

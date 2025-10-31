@@ -1,4 +1,5 @@
 'use client';
+
 import React, { useState } from 'react';
 import { TransitionPanel } from '../TransitionPanel';
 
@@ -7,49 +8,42 @@ export function TabsTransitionPanel() {
 
     const ITEMS = [
         {
-            title: 'Valores',
-            subtitle: 'Nuestros Valores',
+            title: 'Calidad',
+            subtitle: 'Política de calidad',
             content:
-                'Confianza - Orientación al cliente - Normalización - Liderazgo - Adaptabilidad - Fiabilidad - Transparencia.',
+                'Todos los desarrollos se realizan con enfoque en seguridad, auditoría y mantenibilidad. Cada release pasa por controles internos.',
         },
         {
-            title: 'Política de Calidad',
-            subtitle: 'Política de Calidad',
-            content:
-                'En Conlaft, nos dedicamos al desarrollo de software de alta calidad con un enfoque ético y de integridad. Nuestro compromiso no se limita a la excelencia técnica; nos esforzamos por mantener altos estándares éticos en cada proceso.',
-        },
-        {
-            title: 'Principios',
+            title: 'Clientes',
             subtitle: 'Satisfacción del cliente',
             content:
-                'Buscamos la satisfacción total de nuestros clientes ofreciendo software que se ajuste a sus necesidades.',
-        },
-        {
-            title: 'Creatividad',
-            subtitle: 'Creatividad e innovación',
-            content:
-                'Adoptamos una filosofía de creatividad, innovación y competitividad, mejorando constantemente para adaptarnos a un entorno tecnológico en evolución.',
+                'Escuchamos los dolores reales de compliance y los llevamos a producto. El roadmap se alimenta de clientes.',
         },
         {
             title: 'Cumplimiento',
-            subtitle: 'Cumplimiento legal',
+            subtitle: 'Cumplimiento legal y ético',
             content:
-                'Nos comprometemos a cumplir con todas las obligaciones legales y reglamentarias, colaborando activamente en la prevención y detección de actividades ilícitas como el lavado de dinero, fraude y financiación al terrorismo. Desde la dirección, comunicamos esta política a todo nuestro equipo de Conlaft, asegurándonos de su disponibilidad para nuestros clientes y el público en general.',
+                'Alineados con normativas nacionales e internacionales para la prevención del lavado de activos y financiamiento del terrorismo.',
+        },
+        {
+            title: 'Innovación',
+            subtitle: 'Innovación responsable',
+            content:
+                'Adoptamos nuevas tecnologías cuando aportan valor claro: más trazabilidad, más rapidez o más control.',
         },
     ];
 
     return (
         <div className='w-full'>
-            {/* Tabs Buttons */}
-            <div className='mb-6 flex flex-wrap gap-2'>
+            <div className='mb-5 flex flex-wrap gap-2'>
                 {ITEMS.map((item, index) => (
                     <button
                         key={index}
                         onClick={() => setActiveIndex(index)}
-                        className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500/20 ${
+                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
                             activeIndex === index
-                                ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-lg shadow-blue-500/30 scale-105'
-                                : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-200'
+                                ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow'
+                                : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
                         }`}
                     >
                         {item.title}
@@ -57,23 +51,22 @@ export function TabsTransitionPanel() {
                 ))}
             </div>
 
-            {/* Transition Panel */}
-            <div className='overflow-hidden rounded-2xl bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 border border-gray-200 dark:border-gray-700 p-8 shadow-lg'>
+            <div className='overflow-hidden rounded-2xl bg-slate-50/80 dark:bg-slate-900/40 border border-slate-200/50 dark:border-slate-800/40 p-6'>
                 <TransitionPanel
                     activeIndex={activeIndex}
-                    transition={{ duration: 0.3, ease: 'easeInOut' }}
+                    transition={{ duration: 0.28, ease: 'easeInOut' }}
                     variants={{
-                        enter: { opacity: 0, y: 20, filter: 'blur(4px)' },
+                        enter: { opacity: 0, y: 12, filter: 'blur(2px)' },
                         center: { opacity: 1, y: 0, filter: 'blur(0px)' },
-                        exit: { opacity: 0, y: -20, filter: 'blur(4px)' },
+                        exit: { opacity: 0, y: -12, filter: 'blur(2px)' },
                     }}
                 >
                     {ITEMS.map((item, index) => (
-                        <div key={index} className='py-2'>
-                            <h3 className='mb-4 text-2xl font-bold text-blue-600 dark:text-blue-400'>
+                        <div key={index} className='space-y-2'>
+                            <h3 className='text-lg font-semibold text-slate-900 dark:text-white'>
                                 {item.subtitle}
                             </h3>
-                            <p className='text-gray-700 dark:text-gray-300 leading-relaxed text-lg'>
+                            <p className='text-slate-600 dark:text-slate-200 leading-relaxed'>
                                 {item.content}
                             </p>
                         </div>

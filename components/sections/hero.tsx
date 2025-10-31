@@ -23,45 +23,7 @@ export function Hero() {
     }, []);
 
     return (
-        <section className='relative min-h-screen pt-28 sm:pt-36 md:pt-44 pb-16 overflow-hidden'>
-            {/* Animated gradient background - Blue theme */}
-            <div className='absolute inset-0 bg-gradient-to-br from-blue-50 via-cyan-50 to-slate-50 dark:from-gray-900 dark:via-blue-900/20 dark:to-gray-900'></div>
-
-            {/* Subtle grid pattern overlay */}
-            <div className='absolute inset-0 grid-background opacity-40'></div>
-            <div className='absolute inset-0 dot-grid opacity-30'></div>
-
-            {/* Animated gradient orbs - Blue theme */}
-            <div
-                className='absolute top-0 left-0 w-[500px] h-[500px] bg-blue-500/30 rounded-full blur-3xl animate-pulse'
-                style={{
-                    transform: `translate(${mousePosition.x * 0.02}px, ${
-                        mousePosition.y * 0.02
-                    }px)`,
-                    transition: 'transform 0.3s ease-out',
-                }}
-            ></div>
-            <div
-                className='absolute bottom-0 right-0 w-[500px] h-[500px] bg-cyan-500/30 rounded-full blur-3xl animate-pulse'
-                style={{
-                    transform: `translate(-${mousePosition.x * 0.02}px, -${
-                        mousePosition.y * 0.02
-                    }px)`,
-                    transition: 'transform 0.3s ease-out',
-                    animationDelay: '1s',
-                }}
-            ></div>
-            <div
-                className='absolute top-1/2 left-1/2 w-[400px] h-[400px] bg-sky-500/20 rounded-full blur-3xl animate-pulse'
-                style={{
-                    transform: `translate(-50%, -50%) translate(${
-                        mousePosition.x * 0.01
-                    }px, ${mousePosition.y * 0.01}px)`,
-                    transition: 'transform 0.3s ease-out',
-                    animationDelay: '2s',
-                }}
-            ></div>
-
+        <section className='relative min-h-screen pt-10 lg:pt-16 pb-12 overflow-hidden'>
             <div className='container mx-auto px-4 relative z-10'>
                 {/* Main Grid Layout */}
                 <div className='grid grid-cols-1 lg:grid-cols-2 items-center gap-12 mb-20'>
